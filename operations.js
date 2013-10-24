@@ -1,15 +1,15 @@
 /*
  *  Init
  * */
-module.exports = function init (link) {
+exports.init = function (link) {
     // TODO
-    link.send(200, { op: "init" });
+    link.send(200, { op: "init", data: link.data });
 };
 
 /*
  *  Listen
  * */
-module.exports = function listen (link) {
+exports.listen = function (link) {
     // TODO
     link.send(200, { op: "listen" });
 };
@@ -17,7 +17,7 @@ module.exports = function listen (link) {
 /*
  *  Emit
  * */
-module.exports = function emit (link) {
+exports.emit = function (link) {
     // TODO
     link.send(200, { op: "emit" });
 };
