@@ -2,6 +2,7 @@
  *  Init
  * */
 exports.init = function (link) {
+    // console.log(M.app.server);
     // TODO
     link.send(200, { op: "init", data: link.data });
 };
