@@ -12,16 +12,32 @@ exports.init = function (link) {
  *  Listen
  * */
 exports.listen = function (link) {
-    // TODO
-    link.send(200, { op: "listen" });
+
+    // call listen function
+    listen(link.data.options, function (err, data) {
+
+        // handle error
+        if (err) { return link.send(400, err); }
+
+        // send success response
+        link.send(200, data);
+    });
 };
 
 /*
  *  Emit
  * */
 exports.emit = function (link) {
-    // TODO
-    link.send(200, { op: "emit" });
+
+    // call emit function
+    emit(link.data.options, function (err, data) {
+
+        // handle error
+        if (err) { return link.send(400, err); }
+
+        // send success response
+        link.send(200, data);
+    });
 };
 
 
@@ -59,6 +75,7 @@ function emit (options, callback) {
 
     // emit that event and data
     io.sockets.emit(options.event, options.data);
+    callback();
 }
 
 /*
