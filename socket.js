@@ -2,10 +2,16 @@ M.wrap('github/IonicaBizau/web-sockets/dev/socket.js', function (require, module
 var Bind = require("github/jillix/bind");
 var Events = require("github/jillix/events");
 
-module.exports = function init (conf) {
+module.exports = function init (config) {
 
     // get self (the module)
     var self = this;
+
+    // store config in self.config
+    self.config = config;
+
+    // process config
+    processConfig.call(self);
 
     // call events
     Events.call(self, config);
@@ -28,8 +34,23 @@ module.exports = function init (conf) {
             self[meth] = function (options, callback) {
                 self.link(meth, {data: options}, callback);
             };
-        })(method[i])
+        })(methods[i])
     }
+
+    // emit ready
+    self.emit("ready", self.config);
 };
+
+/*
+ *  Process config
+ * */
+function processConfig () {
+
+    // get self (the module)
+    var self = this;
+
+    // binds
+    self.config.binds = self.config.binds || [];
+}
 
 return module; });
