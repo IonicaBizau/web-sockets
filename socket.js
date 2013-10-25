@@ -3,13 +3,33 @@ var Bind = require("github/jillix/bind");
 var Events = require("github/jillix/events");
 
 module.exports = function init (conf) {
-    // TODO This is under developing
-    //      and under testing
+
+    // get self (the module)
     var self = this;
 
-    self.link("init", {data: "Some data"}, function (err, data) {
-        console.log(err, data);
-    });
+    // call events
+    Events.call(self, config);
+
+    // run the binds
+    for (var i = 0; i < config.binds.length; ++i) {
+        Bind.call(self, config.binds[i]);
+    }
+
+    // the public methods
+    var methods = [
+        "init",
+        "emit",
+        "listen"
+    ];
+
+    // create the methods
+    for (var i = 0; i < methods.length; ++i) {
+        (function (meth) {
+            self[meth] = function (options, callback) {
+                self.link(meth, {data: options}, callback);
+            };
+        })(method[i])
+    }
 };
 
 return module; });
