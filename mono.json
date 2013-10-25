@@ -6,7 +6,7 @@
         "/socket.js",
         "github/jillix/bind/v0.2.0",
         "github/jillix/events/v0.1.7",
-        "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+        "http://cdn.socket.io/stable/socket.io.js"
     ],
     "operations": [
         { "file": "operations.js", "function": "init" },
