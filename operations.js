@@ -5,7 +5,13 @@ var io;
  *  Init
  * */
 exports.init = function (link) {
-    init();
+    init(link.data.options, function (err, data) {
+        // handle error
+        if (err) { return link.send(400, err); }
+
+        // send success response
+        link.send(200, data);
+    });
 };
 
 /*
@@ -46,9 +52,22 @@ exports.emit = function (link) {
  *  This function set the io variable
  *
  * */
-function init () {
+function init (options, callback) {
+
+    // options must be an object
+    options = options || {};
+
+    // callback must be a function
+    callback = callback || function () {};
+
+    if (io && !options.force) {
+        return callback();
+    }
+
     // Socket.io server listens to our app
     io = SocketIO.listen(M.app.server);
+
+    callback();
 }
 
 /*
