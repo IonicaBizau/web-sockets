@@ -32,7 +32,7 @@ module.exports = function init (config) {
     for (var i = 0; i < methods.length; ++i) {
         (function (meth) {
             self[meth] = function (options, callback) {
-                self.link(meth, {data: options}, callback);
+                self.link(meth.toLowerCase().substring(6), {data: options}, callback);
             };
         })(methods[i])
     }
