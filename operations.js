@@ -113,3 +113,8 @@ function listen (options, callback) {
 M.on("sockets.init", init);
 M.on("sockets.emit", emit);
 M.on("sockets.listen", listen);
+
+/*
+ *  Emits ready, so the custom server script must listen it
+ * */
+M.emit("sockets.ready");
