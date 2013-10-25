@@ -23,9 +23,9 @@ module.exports = function init (config) {
 
     // the public methods
     var methods = [
-        "init",
-        "emit",
-        "listen"
+        "socketInit",
+        "socketEmit",
+        "socketListen"
     ];
 
     // create the methods
