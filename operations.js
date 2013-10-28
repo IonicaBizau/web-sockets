@@ -120,7 +120,14 @@ function listen (options, callback) {
     if (!io) { init(); }
 
     // listen on that event
-    io.sockets.on(options.event, callback);
+    if (options.event) {
+        if (options.client) {
+            options.client.on(options.event, callback);
+        } else {
+            io.sockets.on(options.event, callback);
+        }
+
+    }
 }
 
 /*
