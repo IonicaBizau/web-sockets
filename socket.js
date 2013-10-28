@@ -4,6 +4,9 @@ var Events = require("github/jillix/events");
 
 module.exports = function init (config) {
 
+    // create the socket
+    var socket = io.connect(config.origin || location.origin.substring(5));
+
     // get self (the module)
     var self = this;
 
@@ -37,8 +40,16 @@ module.exports = function init (config) {
         })(methods[i])
     }
 
-    // emit ready
-    self.emit("ready", self.config);
+    self.socketInit({}, function (err) {
+
+        if (err) { self.emit("error", err); }
+
+        self.socket = socket;
+
+        // emit ready
+        self.emit("ready", self.config, socket);
+    });
+
 };
 
 /*
