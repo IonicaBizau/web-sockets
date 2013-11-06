@@ -1,5 +1,6 @@
 var SocketIO = require("socket.io");
 var io;
+var clients = {};
 
 /*
  *  Init
@@ -126,21 +127,47 @@ function listen (options, callback) {
         } else {
             io.sockets.on(options.event, callback);
         }
-
     }
+}
+
+/*
+ *  sendMessage (object)
+ *  Send message to clients
+ *
+ *  message: an object containing
+ *      - type (string)
+ *      - session (session id): which clinet should recive this message; all if undefined
+ *      - data (object)
+ *
+ * */
+function sendMessage (message) {
+
+    // no message no fun
+    if (!message) { return; }
+
+    // one specific client
+    if (message.session) {
+        clients[message.session].emit(message.type);
+    }
+    // all clients
+    else {
+        for (var sid in clients) {
+            clients[sid].emit(message.type);
+        }
+     }
 }
 
 /*
  *  The events interface:
  *   - sockets.init
  *   - sockets.emit
- *   - sockets.listen
  * */
 M.on("sockets.init", init);
 M.on("sockets.emit", emit);
-M.on("sockets.listen", listen);
+M.on("sockets.send", sendMessage);
 
-/*
- *  Emits ready, so the custom server script must listen it
- * */
-M.emit("sockets.ready");
+// start listening for clients
+listen({ event: "connection" }, function (client) {
+    clients["sid"] = client;
+});
+
