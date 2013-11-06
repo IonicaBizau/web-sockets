@@ -1,4 +1,4 @@
-M.wrap('github/IonicaBizau/web-sockets/dev/socket.js', function (require, module, exports) {
+M.wrap('github/gabipetrovay/web-sockets/dev/socket.js', function (require, module, exports) {
 var Bind = require("github/jillix/bind");
 var Events = require("github/jillix/events");
 
