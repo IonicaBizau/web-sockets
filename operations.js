@@ -121,6 +121,7 @@ function emit (options, callback) {
  *
  *  options:
  *   - event: the event name that listen to
+ *   - client (optional): if provided, the event will be attached to it
  *
  *  callback: the function that must be fired
  *            on that event
@@ -195,17 +196,36 @@ function sendMessage (message) {
  *  The events interface:
  *   - sockets.init
  *   - sockets.emit
+ *   - sockets.listen
  *   - sockets.send
  * */
 M.on("sockets.init", init);
 M.on("sockets.emit", emit);
+M.on("sockets.listen", listen);
 M.on("sockets.send", sendMessage);
+
 
 // start listening for clients
 listen({ event: "connection" }, function (client) {
 
     // add the client to the global client hash
     clients[client.id] = client;
+
+    // sockets.server.send
+    listen({
+        event: "sockets.server.send",
+        client: client
+    }, function (options) {
+        M.emit("sockets.send", options);
+    });
+
+    // sockets.server.listen
+    listen({
+        event: "sockets.server.listen",
+        client: client
+    }, function (options) {
+        M.emit("sockets.listen", options);
+    });
 
     // if we have a session, add the client to thi session as well
     if (client.handshake.headers.cookie) {
