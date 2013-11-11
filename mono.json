@@ -9,8 +9,6 @@
         "http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"
     ],
     "operations": [
-        { "file": "operations.js", "function": "init" },
-        { "file": "operations.js", "function": "listen" },
-        { "file": "operations.js", "function": "emit" }
+        { "file": "operations.js", "function": "init" }
     ]
 }
