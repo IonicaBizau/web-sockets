@@ -16,9 +16,6 @@ module.exports = function init (config) {
     // process config
     processConfig.call(self);
 
-    // call events
-    Events.call(self, config);
-
     // run the binds
     for (var i = 0; i < config.binds.length; ++i) {
         Bind.call(self, config.binds[i]);
@@ -104,6 +101,8 @@ module.exports = function init (config) {
         self.emit("ready", self.config, socket);
     });
 
+    // call events
+    Events.call(self, config);
 };
 
 /*
