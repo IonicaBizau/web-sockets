@@ -167,7 +167,7 @@ function sendMessage (message) {
 
         case "client":
             if (clients[message.dest]) {
-                clients[message.dest].emit(message.data);
+                clients[message.dest].emit(message.event, message.data);
             }
             break;
 
@@ -186,7 +186,7 @@ function sendMessage (message) {
 
         case "all":
             for (var clientId in clients) {
-                clients[clientId].emit(message.data);
+                clients[clientId].emit(message.event, message.data);
             }
             break;
     }
@@ -217,6 +217,14 @@ listen({ event: "connection" }, function (client) {
         client: client
     }, function (options) {
         M.emit("sockets.send", options);
+    });
+
+    // sockets.server.emitGlobal
+    listen({
+        event: "sockets.server.emitGlobal",
+        client: client
+    }, function (options) {
+        M.emit(options.event, options.data);
     });
 
     // if we have a session, add the client to thi session as well

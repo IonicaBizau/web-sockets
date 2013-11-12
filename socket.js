@@ -46,7 +46,20 @@ module.exports = function init (config) {
      *            from socket emit function
      * */
     self.clientEmit = function (options, callback) {
-        self.socket.emit(options.event, options.data, callback);
+        var eventToEmit = options.event;
+        var finalCallback;
+
+        if (typeof options === "string") {
+            eventToEmit = options;
+        }
+
+        if (typeof callback !== "function") {
+            options = callback;
+        } else {
+            finalCallback = callback;
+        }
+
+        self.socket.emit(eventToEmit, options, finalCallback);
     }
 
     /*
@@ -74,6 +87,18 @@ module.exports = function init (config) {
      * */
     self.serverSend = function (options) {
         self.clientEmit("sockets.server.send", options);
+    };
+
+    /*
+     *  self.serverEmitGlobal (options);
+     *  Emits a global event using M.emit()
+     *
+     *  options:
+     *   - event: the event name that is emited
+     *   - data: data to be emited
+     * */
+    self.serverEmitGlobal = function (options) {
+        self.clientEmit("sockets.server.emitGlobal", options);
     };
 
     /*
