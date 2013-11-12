@@ -219,14 +219,6 @@ listen({ event: "connection" }, function (client) {
         M.emit("sockets.send", options);
     });
 
-    // sockets.server.listen
-    listen({
-        event: "sockets.server.listen",
-        client: client
-    }, function (options) {
-        M.emit("sockets.listen", options);
-    });
-
     // if we have a session, add the client to thi session as well
     if (client.handshake.headers.cookie) {
         var match = client.handshake.headers.cookie.match(/_s=(.*);/);

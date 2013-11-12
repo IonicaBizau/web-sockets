@@ -76,18 +76,6 @@ module.exports = function init (config) {
         self.clientEmit("sockets.server.send", options);
     };
 
-
-    /*
-     *  self.serverListe (options);
-     *  Call the listen function from the server
-     *
-     *  options:
-     *   - event: the event name that listen to
-     * */
-    self.serverListen = function (options) {
-        self.clientEmit("sockets.server.listen", options);
-    };
-
     /*
      *  This automatically inits the socket in the page
      * */
