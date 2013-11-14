@@ -1,4 +1,3 @@
-M.wrap('github/IonicaBizau/web-sockets/dev/socket.js', function (require, module, exports) {
 var Bind = require("github/jillix/bind");
 var Events = require("github/jillix/events");
 
@@ -137,5 +136,3 @@ function processConfig () {
         self.config.options.autoinit = true;
     }
 }
-
-return module; });
