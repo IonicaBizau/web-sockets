@@ -5,6 +5,9 @@ Mono module implementation for web sockets.
 
 # Changelog
 
+## v0.2.2
+ - Upgrade to Events v0.1.8 and Bind v0.2.1
+
 ## v0.2.1
  - Emit a global event on the server side using functions from the client side.
  - Added more public functions.
