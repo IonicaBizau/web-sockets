@@ -77,7 +77,7 @@ module.exports = function init (config) {
         }
 
         // emit event passing options and callback
-        self.socket.emit(options.event || options, options, callback);
+        self.socket.emit(options._event || options.event || options, options, callback);
     }
 
     /**
@@ -108,7 +108,7 @@ module.exports = function init (config) {
     self.serverSend = function (options) {
 
         // override the event field
-        options.event = "sockets.server.send";
+        options._event = "sockets.server.send";
 
         // emit a server event
         self.clientEmit(options);
@@ -125,7 +125,7 @@ module.exports = function init (config) {
     self.serverEmitGlobal = function (options) {
 
         // override the event field
-        options.event = "sockets.server.emitGlobal";
+        options._event = "sockets.server.emitGlobal";
 
         // global server event
         self.clientEmit(options);
