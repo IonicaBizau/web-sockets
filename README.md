@@ -5,6 +5,10 @@ Mono module implementation for web sockets.
 
 # Changelog
 
+## dev
+ - Fixed the bug with the first client (https://github.com/IonicaBizau/web-sockets/issues/3)
+ - Debug mode
+
 ## v0.2.2
  - Upgrade to Events v0.1.8 and Bind v0.2.1
 

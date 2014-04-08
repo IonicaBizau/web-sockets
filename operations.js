@@ -1,29 +1,48 @@
-var SocketIO = require("socket.io");
-var io;
+// dependencies and io variable
+var SocketIO = require("socket.io")
+  , io
+  ;
 
-// one session might have several sockets opened
-// this looks like:
-//  {
-//      'sid1': [clientId11, clientId12, etc.],
-//      'sid2': [clientId21, clientId22, etc.],
-//      ..
-//  }
+/**
+ *  one session might have several sockets opened
+ *  this looks like:
+ *   {
+ *       'sid1': [clientId11, clientId12, etc.],
+ *       'sid2': [clientId21, clientId22, etc.],
+ *       ..
+ *   }
+ * */
 var sessions = {};
 
-// the connected clients
-// this looks like:
-//  {
-//      'clientId': client1,
-//      'clientId': client2,
-//      ...
-//  }
+/**
+ * the connected clients
+ * this looks like:
+ *  {
+ *      'clientId': client1,
+ *      'clientId': client2,
+ *      ...
+ *  }
+ *
+ *  */
 var clients = {}
 
-/*
+/**
  *  Init
+ *
  * */
 exports.init = function (link) {
+
+    // data or options missing
+    if (!link.data) {
+        return link.send(400, "Missing data");
+    }
+
+    // attach the log field value
+    link.data.options.log = (link.params || {}).log
+
+    // call init method
     init(link.data.options, function (err, data) {
+
         // handle error
         if (err) { return link.send(400, err); }
 
@@ -32,8 +51,9 @@ exports.init = function (link) {
     });
 };
 
-/*
+/**
  *  Listen
+ *
  * */
 exports.listen = function (link) {
 
@@ -48,8 +68,9 @@ exports.listen = function (link) {
     });
 };
 
-/*
+/**
  *  Emit
+ *
  * */
 exports.emit = function (link) {
 
@@ -65,9 +86,9 @@ exports.emit = function (link) {
 };
 
 
-/*
- *  init ()
- *  This function set the io variable
+/**
+ *  init
+ *  This function inits the io variable
  *
  * */
 function init (options, callback) {
@@ -78,26 +99,33 @@ function init (options, callback) {
     // callback must be a function
     callback = callback || function () {};
 
+    // io is already set and no force is true
     if (io && !options.force) {
         return callback();
     }
 
-    // Socket.io server listens to our app
-    io = SocketIO.listen(M.app.server);
+    // set the io variable
+    io = SocketIO.listen(M.app.server, {log: Boolean(options.log)});
 
-    callback();
+    // start listening for clients
+    listenForClients();
+
+    // on the client side "REFRESH" response from init operation is special
+    callback(null, "REFRESH");
 }
 
-/*
+/**
  *  emit (object, function)
  *  Emit some event and data
  *
- *  options:
- *   - event: the event name
- *   - data:  data that must be emited
+ *  Arguments
+ *    options:
+ *     - event: the event name
+ *     - data:  data that must be emited
  *
- *  callback:
- *   - callback function
+ *    callback:
+ *     - callback function
+ *
  * */
 function emit (options, callback) {
 
@@ -115,16 +143,18 @@ function emit (options, callback) {
     callback();
 }
 
-/*
+/**
+ *
  *  listen (object, function)
  *  Listen on some event and callback the socket
  *
- *  options:
- *   - event: the event name that listen to
- *   - client (optional): if provided, the event will be attached to it
+ *  Arguments
+ *    options:
+ *     - event: the event name that listen to
+ *     - client (optional): if provided, the event will be attached to it
  *
- *  callback: the function that must be fired
- *            on that event
+ *    callback: the function that must be fired
+ *              on that event
  *
  * */
 function listen (options, callback) {
@@ -148,14 +178,16 @@ function listen (options, callback) {
     }
 }
 
-/*
+/**
+ *
  *  sendMessage (object)
  *  Send message to clients
  *
- *  message: an object containing
- *      - type (string): client, session, group, or all
- *      - session (session id): which clinet should recive this message; all if undefined
- *      - data (object)
+ *  Arguments
+ *    message: an object containing
+ *        - type (string): client, session, group, or all
+ *        - session (session id): which clinet should recive this message; all if undefined
+ *        - data (object)
  *
  * */
 function sendMessage (message) {
@@ -205,37 +237,52 @@ M.on("sockets.listen", listen);
 M.on("sockets.send", sendMessage);
 
 
-// start listening for clients
-listen({ event: "connection" }, function (client) {
+/**
+ * start listening for clients
+ *
+ * */
+function listenForClients () {
 
-    // add the client to the global client hash
-    clients[client.id] = client;
+    // call listen method
+    listen({ event: "connection" }, function (client) {
 
-    // sockets.server.send
-    listen({
-        event: "sockets.server.send",
-        client: client
-    }, function (options) {
-        M.emit("sockets.send", options);
-    });
+        // add the client to the global client hash
+        clients[client.id] = client;
 
-    // sockets.server.emitGlobal
-    listen({
-        event: "sockets.server.emitGlobal",
-        client: client
-    }, function (options) {
-        M.emit(options.event, options.data);
-    });
+        // sockets.server.send
+        listen({
+            event: "sockets.server.send",
+            client: client
+        }, function (options) {
+            M.emit("sockets.send", options);
+        });
 
-    // if we have a session, add the client to thi session as well
-    if (client.handshake.headers.cookie) {
-        var match = client.handshake.headers.cookie.match(/_s=(.*);/);
-        if (match && match[1]) {
-            var sid = match[1];
-            var sessionClients = sessions[sid] || [];
-            sessionClients.push(client.id);
-            sessions[sid] = sessionClients;
+        // sockets.server.emitGlobal
+        listen({
+            event: "sockets.server.emitGlobal",
+            client: client
+        }, function (options) {
+            M.emit(options.event, options.data);
+        });
+
+        // if we have a session, add the client to thi session as well
+        if (client.handshake.headers.cookie) {
+
+            var match = client.handshake.headers.cookie.match(/_s=(.*);/);
+            if (match && match[1]) {
+
+                // get the session id and its clients
+                var sid = match[1]
+                  , sessionClients = sessions[sid] || []
+                  ;
+
+                // push the new client id
+                sessionClients.push(client.id);
+
+                // set the clients of the session in the sessions object
+                sessions[sid] = sessionClients;
+            }
         }
-    }
-});
+    });
+}
 

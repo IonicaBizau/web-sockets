@@ -1,6 +1,13 @@
-var Bind = require("github/jillix/bind");
-var Events = require("github/jillix/events");
+// bind and events dependencies
+var Bind = require("github/jillix/bind")
+  , Events = require("github/jillix/events")
+  ;
 
+/**
+ *  Web Sockets
+ *  Mono module implementation for web sockets.
+ *
+ * */
 module.exports = function init (config) {
 
     // create the socket
@@ -20,7 +27,7 @@ module.exports = function init (config) {
         Bind.call(self, config.binds[i]);
     }
 
-    /*
+    /**
      *  self.socketInit (object, function);
      *  Inits the socket in the page. This is called automatically!
      *
@@ -30,10 +37,20 @@ module.exports = function init (config) {
      *
      * */
     self.socketInit = function (options, callback) {
-        self.link("init", {data: options}, callback);
+
+        // call the server operation
+        self.link("init", {data: options}, function (err, data) {
+
+            // first time when initing the websocket
+            if (!err && data === "REFRESH") {
+                location.reload();
+            }
+
+            callback (err, data);
+        });
     };
 
-    /*
+    /**
      *  self.clientEmit (object, function);
      *  Emits an event and data to the server
      *
@@ -45,23 +62,22 @@ module.exports = function init (config) {
      *            from socket emit function
      * */
     self.clientEmit = function (options, callback) {
-        var eventToEmit = options.event;
-        var finalCallback;
 
-        if (typeof options === "string") {
-            eventToEmit = options;
+        // validate options
+        if (!options || options.constructor !== Object) {
+            throw new Error ("Options must be a string or an object");
         }
 
-        if (typeof callback !== "function") {
-            options = callback;
-        } else {
-            finalCallback = callback;
+        // validate callback
+        if (!callback || callback.constructor !== Function) {
+            throw new Error ("Callback must be a function");
         }
 
-        self.socket.emit(eventToEmit, options, finalCallback);
+        // emit event passing options and callback
+        self.socket.emit(options.event || options, options, callback);
     }
 
-    /*
+    /**
      *  self.clientListen (object, function);
      *  Listen an event that comes from the server
      *
@@ -72,10 +88,12 @@ module.exports = function init (config) {
      *
      * */
     self.clientListen = function (options, callback) {
+
+        // listen for events from server
         self.socket.on(options.event, callback);
     };
 
-    /*
+    /**
      *  self.serverSend (options);
      *  Call the sendMessage from the server
      *
@@ -85,10 +103,12 @@ module.exports = function init (config) {
      *      - data (object)
      * */
     self.serverSend = function (options) {
+
+        // emit a server event
         self.clientEmit("sockets.server.send", options);
     };
 
-    /*
+    /**
      *  self.serverEmitGlobal (options);
      *  Emits a global event using M.emit()
      *
@@ -97,16 +117,21 @@ module.exports = function init (config) {
      *   - data: data to be emited
      * */
     self.serverEmitGlobal = function (options) {
+
+        // global server event
         self.clientEmit("sockets.server.emitGlobal", options);
     };
 
-    /*
+    /**
      *  This automatically inits the socket in the page
+     *
      * */
     self.socketInit({}, function (err) {
 
-        if (err) { self.emit("error", err); }
+        // handle error
+        if (err) { return self.emit("error", err); }
 
+        // set socket object
         self.socket = socket;
 
         // emit ready
@@ -117,8 +142,9 @@ module.exports = function init (config) {
     Events.call(self, config);
 };
 
-/*
+/**
  *  Process config
+ *
  * */
 function processConfig () {
 
@@ -130,9 +156,4 @@ function processConfig () {
 
     // `options` is an object
     self.config.options = self.config.options || {};
-
-    // autoinit (default: true);
-    if (self.config.options.autoinit !== false) {
-        self.config.options.autoinit = true;
-    }
 }
