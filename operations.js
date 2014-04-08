@@ -37,6 +37,9 @@ exports.init = function (link) {
         return link.send(400, "Missing data");
     }
 
+    // force options to be an object
+    link.data.options = Object (link.data.options);
+
     // attach the log field value
     link.data.options.log = (link.params || {}).log
 
