@@ -63,8 +63,11 @@ module.exports = function init (config) {
      * */
     self.clientEmit = function (options, callback) {
 
+        // default value for callback
+        callback = callback || function () {};
+
         // validate options
-        if (!options || options.constructor !== Object) {
+        if (!options || options.constructor !== Object && options.constructor !== String) {
             throw new Error ("Options must be a string or an object");
         }
 
@@ -104,8 +107,11 @@ module.exports = function init (config) {
      * */
     self.serverSend = function (options) {
 
+        // override the event field
+        options.event = "sockets.server.send";
+
         // emit a server event
-        self.clientEmit("sockets.server.send", options);
+        self.clientEmit(options);
     };
 
     /**
@@ -118,8 +124,11 @@ module.exports = function init (config) {
      * */
     self.serverEmitGlobal = function (options) {
 
+        // override the event field
+        options.event = "sockets.server.emitGlobal";
+
         // global server event
-        self.clientEmit("sockets.server.emitGlobal", options);
+        self.clientEmit(options);
     };
 
     /**
