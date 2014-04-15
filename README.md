@@ -36,7 +36,7 @@ Inits the socket in the page. This is called automatically!
  - `callback`: a function that is called when the socket it inited
 
 
-### `self.clientEmit (object, function)`
+### `self.clientEmit (options, function)`
 Emits an event and data to the server
 
  - `options`: an object containing
@@ -46,7 +46,7 @@ Emits an event and data to the server
  - `callback`: a function that is passed too to the emit function from socket emit function
 
 
-### `self.clientListen (object, function)`
+### `self.clientListen (options, function)`
 Listen an event that comes from the server
 
  - `options`: an object containing
@@ -58,7 +58,7 @@ callback: a function that is passed too to the on function
 Call the sendMessage from the server
 
  - `message`: an object containing
-    - `type1 (string): client, session, group, or all
+    - `type` (string): client, session, group, or all
     - `session` (session id): which clinet should recive this message; all if undefined
     - `data` (object)
 
