@@ -1,4 +1,4 @@
-web-sockets
+Web Sockets
 ===========
 
 Mono module implementation for web sockets.
