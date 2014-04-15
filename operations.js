@@ -38,13 +38,13 @@ exports.init = function (link) {
     }
 
     // force options to be an object
-    link.data.options = Object (link.data.options);
+    link.data = Object (link.data);
 
     // attach the log field value
-    link.data.options.log = (link.params || {}).log
+    link.data.log = link.data.log || (link.params || {}).log
 
     // call init method
-    init(link.data.options, function (err, data) {
+    init(link.data, function (err, data) {
 
         // handle error
         if (err) { return link.send(400, err); }

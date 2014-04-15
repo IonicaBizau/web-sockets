@@ -31,7 +31,10 @@ module.exports = function init (config) {
      *  self.socketInit (object, function);
      *  Inits the socket in the page. This is called automatically!
      *
-     *  options: an object containing anything
+     *  options: an object containing the following fields:
+     *      - force: if the websocket is already inited and `force` is `true`,
+     *        the websocket will be reinited
+     *      - log: log level passed to socket.io
      *
      *  callback: a function that is called when the socket it inited
      *
