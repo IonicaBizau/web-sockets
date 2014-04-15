@@ -79,17 +79,15 @@ The module listens for the following server events:
  - `sockets.listen`
  - `sockets.send`
 
-
 # Changelog
 
-## dev
+## v0.3.0
  - Fixed bugs in `clientEmit` method
  - Fixed #3: send a refresh signal on the client
  - Fixed #2: set the debug mode (default: `false`)
  - Syntax changes
  - Comments
  - Additional checks for preventing errors
-
 
 ## v0.2.2
  - Upgrade to Events v0.1.8 and Bind v0.2.1
