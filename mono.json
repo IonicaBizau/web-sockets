@@ -4,8 +4,8 @@
     "name": "web-sockets",
     "dependencies": [
         "/socket.js",
-        "github/jillix/bind/v0.2.1",
-        "github/jillix/events/v0.1.8",
+        "github/jillix/bind/v0.3.0",
+        "github/jillix/events/v0.3.0",
         "http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"
     ],
     "operations": [
