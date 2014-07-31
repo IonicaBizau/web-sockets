@@ -81,6 +81,9 @@ The module listens for the following server events:
 
 # Changelog
 
+## v0.4.0
+ - Updated deps
+
 ## v0.3.0
  - Fixed bugs in `clientEmit` method
  - Fixed #3: send a refresh signal on the client
