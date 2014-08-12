@@ -1,7 +1,6 @@
 // bind and events dependencies
-var Bind = require("github/jillix/bind")
-  , Events = require("github/jillix/events")
-  ;
+var Bind = require("github/jillix/bind");
+var Events = require("github/jillix/events");
 
 /**
  *  Web Sockets
@@ -11,7 +10,7 @@ var Bind = require("github/jillix/bind")
 module.exports = function init (config) {
 
     // create the socket
-    var socket = io.connect(config.origin || location.origin.substring(5));
+    var socket = io.connect(config.origin || ("//" + location.host));
 
     // get self (the module)
     var self = this;

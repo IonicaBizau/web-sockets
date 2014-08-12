@@ -81,6 +81,12 @@ The module listens for the following server events:
 
 # Changelog
 
+## v0.4.1
+ - Use `location.host` instead of `location.origin` (IE compatibility, #5)
+ - Update to Bind v0.3.1
+ - Minor syntax changes
+ - New owner (@jillix)
+
 ## v0.4.0
  - Updated deps
 
