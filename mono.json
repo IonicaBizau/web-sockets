@@ -1,6 +1,6 @@
 {
     "source": "github",
-    "owner": "IonicaBizau",
+    "owner": "jillix",
     "name": "web-sockets",
     "dependencies": [
         "/socket.js",
