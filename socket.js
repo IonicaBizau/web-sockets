@@ -1,7 +1,6 @@
 // bind and events dependencies
-var Bind = require("github/jillix/bind")
-  , Events = require("github/jillix/events")
-  ;
+var Bind = require("github/jillix/bind");
+var Events = require("github/jillix/events");
 
 /**
  *  Web Sockets
