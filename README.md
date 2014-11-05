@@ -8,7 +8,7 @@ Mono module implementation for web sockets.
 
 ```js
 "webSockets": {
-    "module": "github/IonicaBizau/web-sockets/MODULE_VERSION"
+    "module": "github/jillix/web-sockets/MODULE_VERSION"
   , "roles": MONO_ROLES
   , "config": {
         "binds": BIND_CONFIGURATION   // optional
