@@ -81,6 +81,10 @@ The module listens for the following server events:
 
 # Changelog
 
+## v0.5.0
+ - transferred the module to the new jxMono organization
+ - updated Bind to `v0.4.0`, Events to `v0.4.0`
+
 ## v0.4.1
  - Use `location.host` instead of `location.origin` (IE compatibility, #5)
  - Update to Bind v0.3.1
