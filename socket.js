@@ -1,6 +1,6 @@
 // bind and events dependencies
-var Bind = require("github/jillix/bind");
-var Events = require("github/jillix/events");
+var Bind = require("github/jxmono/bind");
+var Events = require("github/jxmono/events");
 
 /**
  *  Web Sockets
